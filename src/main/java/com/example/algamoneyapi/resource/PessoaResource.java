@@ -8,55 +8,51 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.algamoneyapi.model.Categoria;
-import com.example.algamoneyapi.repository.CategoriaRepository;
+import com.example.algamoneyapi.model.Pessoa;
+import com.example.algamoneyapi.repository.PessoaRepository;
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaResource {
-
+@RequestMapping("/pessoas")
+public class PessoaResource {
+	
 	@Autowired
-	private CategoriaRepository categoriaRepository;
+	private PessoaRepository pessoaRepository;
 	
 	@GetMapping
-	public List<Categoria> listar(){
-		 return categoriaRepository.findAll();
-		
+	public List<Pessoa> listar(){
+		return pessoaRepository.findAll();
 	}
 	
+	
 	@PostMapping
-	public ResponseEntity<Categoria> criar(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
-		Categoria categoriaSalva = categoriaRepository.save(categoria);
+	public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response){
+	
+		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
 		
-		//retorna http://localhost:8080/categorias/8 no header Location
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-			.buildAndExpand(categoriaSalva.getCodigo()).toUri();
+				.buildAndExpand(pessoaSalva.getCodigo()).toUri();
 		response.setHeader("Location", uri.toASCIIString());
 		
-		
-		return ResponseEntity.created(uri).body(categoriaSalva);
-		
+		return ResponseEntity.created(uri).body(pessoaSalva);
+					
 		
 	}
 	
 	@GetMapping("/{codigo}")
 	public ResponseEntity buscarPeloCodigo(@PathVariable Long codigo) {
-	   Optional categoria =  this.categoriaRepository.findById(codigo);
-	   return categoria.isPresent() ?
-			   ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
+		Optional pessoa = this.pessoaRepository.findById(codigo);
+		return pessoa.isPresent() ?
+				ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
 	}
-	
 	
 	
 	
