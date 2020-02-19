@@ -60,6 +60,16 @@
         	<artifactId>commons-lang3</artifactId>
         	<version>3.9</version>
         </dependency>
+        <dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-jpamodelgen</artifactId>
+		    <version>5.4.12.Final</version>
+		    <scope>provided</scope>
+		</dependency>
+
+        
+        
+        
 	</dependencies>
 
 	<build>
